@@ -1,0 +1,23 @@
+<html>
+	
+</html>
+
+<script>
+	
+	// Observers in Javascript
+	// When an object is modified an observer
+	// can be notified (or all observers)
+
+	// creating the subject pattern
+	var Subject = function() {
+		this.observers = [];
+
+		return {
+			subscribeObserver: function(observer) {
+				this.observers.push(observer);
+			}
+		}
+	}
+
+
+</script>
