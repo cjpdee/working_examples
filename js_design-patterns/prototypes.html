@@ -103,6 +103,11 @@
 		return pet;
 	}
 
+	Pet.prototype = {
+		describe(){} // es6 syntax
+		}
+	}
+
 	Pet.prototype.describe = function () {
 		console.log(`${this.name} is a ${this.type} with a ${this.color} coat.`);
 	}

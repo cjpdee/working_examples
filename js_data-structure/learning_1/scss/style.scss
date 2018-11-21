@@ -1,0 +1,65 @@
+@function em($pxval, $base: 16) {
+	@return ($pxval / $base) * 1em;
+}
+
+%voteButton {
+    flex: 1 0 50%;
+}
+
+* { box-sizing: border-box; }
+body {
+    min-height: 100vh;
+    margin: 0;
+}
+
+.controls {
+    &__wrap {
+        padding: em(10) em(20);
+        background-color: darkgrey;
+    }
+    &__btn {
+        background-color: lightgrey;
+        color: white;
+    }
+}
+
+.display__wrap {
+    height: 100%;
+    background-color: #f4f4f4;
+    padding: em(20);
+}
+
+.post {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: em(20);
+
+    &__votes {
+        &__wrap {
+            flex: 0 0 em(64);
+            height: em(64);
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__upvote {
+            @extend %voteButton;
+            background-color: orange;
+        }
+        &__downvote {
+            @extend %voteButton;
+            background-color: blue;
+        }
+    }
+
+    &__main {
+        flex: 0 1 100%;
+        padding: em(10);
+        background-color: white;
+    }
+
+    &__header {
+        margin: 0;
+    }
+}
