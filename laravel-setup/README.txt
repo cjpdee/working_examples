@@ -10,3 +10,5 @@ cp node_modules/laravel-mix/setup/webpack.mix.js ./
 then clone this webpack.mix.js & package.json to my-app
 
 my-app will follow the same structure as this directory
+
+make sure the repo has a .gitignore to prevent node_modules being commited
