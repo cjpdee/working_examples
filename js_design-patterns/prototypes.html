@@ -1,0 +1,273 @@
+<html>
+	<!-- <canvas id="canvas" width="640" height="480" data-js="canvas" style="border:1px solid;"></canvas> -->
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script>
+	
+	// Prototype Exercises
+
+	// FUNCTIONAL INSTANTIATION
+
+	/*
+		A simple constructor function which houses
+		all it's functions, and re-creates each function
+		for each instance that is constructed.
+		Not very efficient, bad performance.
+	*/
+
+	function burger(name,meat,sauce) {
+		let burger = {};
+		burger.name = name;
+		burger.meat = meat;
+		burger.sauce = sauce;
+		burger.cooked = false;
+
+		burger.cook = function () {
+			console.log("Your " + burger.meat + " is cooking");
+			burger.cooked = true;
+		}
+
+		burger.build = function () {
+			if(burger.cooked) {
+				console.log("Put the " + burger.sauce + " below the " + burger.meat + " and you've got a " + burger.name);
+			} else {
+				console.log("you need to cook the " + burger.meat + " first");
+			}
+		}
+
+		return burger;
+	}
+
+	var bigKahuna = new burger("Big Kahuna","beef","mayo");
+
+	var buttermilkChicken = new burger("Buttermilk Chicken","breaded chicken","BBQ");
+
+
+	// ---=====-=-=-=-=-=-=-======-=-=-=-=-=-=-=-=====---
+
+	// FUNCTIONAL INSTANTIATION WITH SHARED METHODS
+
+	/*
+		Methods of the constructor have been moved outside the constructor
+		The constructor only references these methods
+		As a result less independent methods need to be created
+		Good for performance!
+	*/
+
+	function person(name,age,height) {
+		let person = Object.create(personMethods);
+		person.name = name;
+		person.age = age;
+		person.height = height;
+		person.greet = personMethods.greet;
+		person.describe = personMethods.describe;
+
+		return person;
+	}
+
+	var personMethods = {
+		greet() {
+			console.log(`${this.name} says hi`)
+		},
+		describe() {
+			console.log(`${this.name} is ${this.age} years old & ${this.height} feet tall`)
+		}
+	}
+
+	var john = person("John Jimbo",40,12);
+	var dave = person("Dave Davos",15,300);
+
+
+	// ---==-=-=-=-=====-=-=-=-==---==-=-=-====-=-=-==---
+
+	// PROTOTYPAL INSTANTIATION
+
+	/*
+		Same as above example
+		Except that instead of creating an arbitrary object
+		to house the Pet methods, the prototype object on
+		Pet is used to store the methods and :
+		
+		In the constructor, Object.create() is used instead
+		of initialising an empty object. Object.create()
+		makes a fallback reference in case there is no data
+		for the new constructed object.
+	*/
+
+	function Pet(name,type,color) {
+		let pet = Object.create(Pet.prototype);
+		pet.name = name;
+		pet.type = type;
+		pet.color = color;
+
+		return pet;
+	}
+
+	Pet.prototype = {
+		describe(){} // es6 syntax
+		}
+	}
+
+	Pet.prototype.describe = function () {
+		console.log(`${this.name} is a ${this.type} with a ${this.color} coat.`);
+	}
+
+	Pet.prototype.kill = function() {
+		console.log(`${this.name} has died.`)
+		delete this.name, delete this.type, delete this.color;
+		// doesn't actually delete the object, just the references
+		// deleting should be managed by scope
+	}
+
+	var fluffles = Pet("Fluffles","cat","white");
+	var buster = Pet("Buster","dog","black");
+
+
+	// PSEUDOCLASSICAL INSTANTIATION
+
+	// This is the same constructor function simplified thanks to the 'new' keyword
+
+	//*
+	function Pet(name,type,color) {
+		this.name = name;
+		this.type = type;
+		this.color = color;
+	}
+
+	var maxwell = new Pet("Maxwell","dog","brown");
+	var kermit  = Pet("Kermit","frog","green"); // doesn't work
+	//*/
+
+	// ---=====-=-=-=-=-=-=-======-=-=-=-=-=-=-=-=====---
+
+	// ES6 CLASSES
+
+	/*
+		ES6 classes allow this to work.
+		It's purely syntactical and does the same shit as before
+		Except it's shorter and smahter
+	*/
+
+	// class Car {
+	// 	constructor(make,model) {
+	// 		this.make = make;
+	// 		this.model = model;
+	// 	}
+	// 	drive() {
+	// 		console.log(`The ${this.model} is driving`);
+	// 	}
+	// 	stop() {
+	// 		console.log(`The ${this.model} has stopped`);
+	// 	}
+	// 	describe() {
+	// 		console.log(`This car is a ${this.make} ${this.model}`);
+	// 	}
+	// }
+
+	// const defender = new Car("Land Rover","Defender");
+	// const fiat500  = new Car("Fiat","500");
+
+
+	// ---=====-=-=-=-=-=-=-======-=-=-=-=-=-=-=-=====---
+
+	// ES6 CLASSES - GENERALLY SHARED FUNCTIONS
+
+	/*
+		If you need a function which is relevant to the class,
+		but isn't relevant to every class (i.e. you )
+	*/
+
+	//*
+	class Car {
+		constructor(make,model,cost) {
+			this.make = make;
+			this.model = model;
+			this.cost = cost;
+		}
+		drive() {
+			console.log(`The ${this.model} is driving`);
+		}
+		stop() {
+			console.log(`The ${this.model} has stopped`);
+		}
+		describe() {
+			console.log(`This car is a ${this.make} ${this.model}`);
+		}
+		static cheapestOption(cars) {
+			const sortedByCheapest = cars.sort((a,b) => {
+				return a.cost - b.cost;
+			});
+			return `${sortedByCheapest[0].make} ${sortedByCheapest[0].model}`
+		}
+	}
+
+	const defender = new Car("Land Rover","Defender",3000);
+	const fiat500  = new Car("Fiat","500",2000);
+
+	// Run:
+	// Car.cheapestOption([defender,fiat500]);
+
+	// Finding which properties are inherited from the prototype
+
+	console.log(defender.hasOwnProperty("model")); 	  // true
+	console.log(defender.hasOwnProperty("describe")); // false
+	//*/
+
+
+	// ---=====-=-=-=-=-=-=-======-=-=-=-=-=-=-=-=====---
+
+	// ES6 CLASSES - IN CASE YOU FORGET 'NEW'
+
+	/*
+		Use this fallback in case you always forget
+		to use new, I guess
+	*/
+	/*
+	function Car(make,model,cost) {
+		if(this instanceof Car === false) {
+			return new Car(make,model,cost)
+		}
+
+		this.make = make;
+		this.model = model;
+		this.cost = cost;
+	}
+
+	const defender = Car("Land Rover","Defender",3000);
+	const fiat500  = new Car("Fiat","500",2000);
+	//*/
+
+	// ---=-=-=-=-=-=--------=-=-=-=-=-=---------=-=-=-=-=---
+	
+	// IGNORE
+
+	// var canvas = document.getElementById("canvas");
+	// var ctx = canvas.getContext("2d");
+	// ctx.startPos = [(640 / 2),(480 / 2)];
+
+	// // prototyping stuff
+
+	// // create and draw a perfect shape
+	// function shape(sides,sideLength,color) {
+	// 	let shape = {};
+	// 	shape.sides = sides;
+	// 	shape.sideLength = sideLength;
+	// 	shape.color = color;
+
+	// 	shape.angle = (360 / shape.sides);
+
+		
+
+	// 	ctx.moveTo((640 / 2),(480 / 2));
+
+	// 	shape.drawLine = function() {
+	// 		beginPath();
+
+	// 	}
+
+	// 	shape.drawShape = function() {
+
+	// 	}
+	// }
+
+</script>
